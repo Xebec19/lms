@@ -10,3 +10,6 @@ This project uses Nextjs and Go
   - contains users service
   - uses go
   - runs on localhost: 8081
+- common
+  - contains common code for all services
+  - uses go

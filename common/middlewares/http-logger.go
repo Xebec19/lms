@@ -3,7 +3,7 @@ package middlewares
 import (
 	"net/http"
 
-	"github.com/Xebec19/lms/users-svc/internal/logger"
+	"github.com/Xebec19/lms/common/pkg/logger"
 	"go.uber.org/zap"
 )
 
