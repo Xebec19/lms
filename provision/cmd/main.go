@@ -24,9 +24,12 @@ func main() {
 	server := internal.CreateServer()
 
 	go func() {
+		logger.Log.Info("Provision running", zap.String("PORT", utils.GetConfig().Port))
+
 		err := server.ListenAndServe()
+
 		if err != nil {
-			logger.Log.Error("Failed to start server", zap.Error(err))
+			logger.Log.Error("Server stopped", zap.Error(err))
 			os.Exit(1)
 		}
 	}()
