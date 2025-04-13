@@ -3,7 +3,7 @@ package utils
 import (
 	"os"
 
-	"github.com/Xebec19/lms/users-svc/internal/logger"
+	"github.com/Xebec19/lms/common/pkg/logger"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 )

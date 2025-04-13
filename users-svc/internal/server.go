@@ -3,9 +3,9 @@ package internal
 import (
 	"net/http"
 
+	"github.com/Xebec19/lms/common/middlewares"
+	"github.com/Xebec19/lms/common/utils"
 	"github.com/Xebec19/lms/users-svc/internal/handler"
-	"github.com/Xebec19/lms/users-svc/internal/middlewares"
-	"github.com/Xebec19/lms/users-svc/internal/utils"
 	"github.com/gorilla/mux"
 )
 

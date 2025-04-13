@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/Xebec19/lms/common/pkg/logger"
+	"github.com/Xebec19/lms/common/utils"
 	"github.com/Xebec19/lms/users-svc/internal"
-	"github.com/Xebec19/lms/users-svc/internal/logger"
-	"github.com/Xebec19/lms/users-svc/internal/utils"
 	"go.uber.org/zap"
 )
 
