@@ -23,7 +23,7 @@ func CreateServer() *http.Server {
 }
 
 func handleRoutes(r *mux.Router) {
-	api := r.PathPrefix("/api/v1/users").Subrouter()
+	api := r.PathPrefix("/api/v1/provision").Subrouter()
 
 	api.HandleFunc("/health", handler.HandleHealthCheck).Methods("GET")
 
