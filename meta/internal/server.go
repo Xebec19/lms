@@ -5,7 +5,7 @@ import (
 
 	"github.com/Xebec19/lms/common/middlewares"
 	"github.com/Xebec19/lms/common/utils"
-	"github.com/Xebec19/lms/provision/internal/handler"
+	"github.com/Xebec19/lms/meta/internal/handler"
 	"github.com/gorilla/mux"
 )
 
@@ -23,7 +23,7 @@ func CreateServer() *http.Server {
 }
 
 func handleRoutes(r *mux.Router) {
-	api := r.PathPrefix("/api/v1/provision").Subrouter()
+	api := r.PathPrefix("/api/v1/meta").Subrouter()
 
 	api.HandleFunc("/health", handler.HandleHealthCheck).Methods("GET")
 
