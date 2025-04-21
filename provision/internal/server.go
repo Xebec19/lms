@@ -28,3 +28,8 @@ func handleRoutes(r *mux.Router) {
 	api.HandleFunc("/health", handler.HandleHealthCheck).Methods("GET")
 
 }
+
+func handleAuthRoutes(r *mux.Router) {
+	// auth := r.PathPrefix("/auth").Subrouter()
+
+}

@@ -8,7 +8,7 @@ import (
 
 	"github.com/Xebec19/lms/common/pkg/logger"
 	"github.com/Xebec19/lms/common/utils"
-	"github.com/Xebec19/lms/users-svc/internal"
+	"github.com/Xebec19/lms/sample/internal"
 	"go.uber.org/zap"
 )
 
@@ -23,9 +23,12 @@ func main() {
 	server := internal.CreateServer()
 
 	go func() {
+		logger.Log.Info("Sample running", zap.String("PORT", utils.GetConfig().Port))
+
 		err := server.ListenAndServe()
+
 		if err != nil {
-			logger.Log.Error("Failed to start server", zap.Error(err))
+			logger.Log.Error("Server stopped", zap.Error(err))
 			os.Exit(1)
 		}
 	}()

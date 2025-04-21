@@ -8,8 +8,7 @@ import (
 
 	"github.com/Xebec19/lms/common/pkg/logger"
 	"github.com/Xebec19/lms/common/utils"
-	"github.com/Xebec19/lms/meta/internal"
-
+	"github.com/Xebec19/lms/provision/internal"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +23,7 @@ func main() {
 	server := internal.CreateServer()
 
 	go func() {
-		logger.Log.Info("Meta running", zap.String("PORT", utils.GetConfig().Port))
+		logger.Log.Info("Provision running", zap.String("PORT", utils.GetConfig().Port))
 
 		err := server.ListenAndServe()
 
