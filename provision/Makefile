@@ -1,4 +1,4 @@
 dev: 
-	go run cmd/main.go
+	go run cmd/web/main.go
 
 PHONY: dev
