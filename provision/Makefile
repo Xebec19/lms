@@ -1,4 +1,7 @@
 dev: 
 	go run cmd/web/main.go
 
-PHONY: dev
+debug:
+	air -c .air.toml
+
+PHONY: dev debug

@@ -1,18 +1,19 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/Xebec19/lms/common/utils"
+	"github.com/Xebec19/lms/provision/internal/requests"
 )
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
-	var req interface{}
+	var req requests.SignupRequest
 
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		utils.WriteResponse(w, http.StatusBadRequest, "Invalid request payload")
+	err := utils.GetValidatedStruct(r, &req)
+	if err != nil {
+		utils.WriteResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
