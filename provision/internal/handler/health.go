@@ -7,5 +7,5 @@ import (
 )
 
 func HandleHealthCheck(w http.ResponseWriter, r *http.Request) {
-	utils.WriteResponse(w, http.StatusOK, map[string]string{"status": "ok"})
+	utils.WriteResponse(w, http.StatusOK, "Provision is OK", "ok")
 }
