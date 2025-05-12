@@ -50,3 +50,33 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	utils.WriteResponse(w, http.StatusOK, "Signup successful", nil)
 }
+
+func HandleSignin(w http.ResponseWriter, r *http.Request) {
+	var req requests.SigninRequest
+
+	err := utils.GetValidatedStruct(r, &req)
+	if err != nil {
+		utils.WriteErrorResponse(w, http.StatusBadRequest, err)
+		return
+	}
+
+	db, err := db.GetDB()
+	if err != nil {
+		utils.WriteErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	userRepo := repository.NewUserRepo(db)
+	user, err := userRepo.GetUserByEmail(req.Email)
+	if err != nil {
+		utils.WriteErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	if err := bcrypt.CheckPasswordHash(user.Password, req.Password); err != nil {
+		utils.WriteErrorResponse(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	utils.WriteResponse(w, http.StatusOK, "Signin successful", nil)
+}
