@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"strings"
+
 	"github.com/Xebec19/lms/provision/internal/db/models"
 	"gorm.io/gorm"
 )
@@ -25,6 +27,14 @@ func NewUserRepo(db *gorm.DB) *UserRepo {
 func (r *UserRepo) GetUser(id string) (*models.User, error) {
 	var user models.User
 	if err := r.db.First(&user, id).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *UserRepo) GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	if err := r.db.Where("lower(email) = ?", strings.ToLower(email)).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

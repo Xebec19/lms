@@ -8,6 +8,6 @@ type User struct {
 	LastName  string `json:"last_name" gorm:"type:varchar(100)"`
 	Email     string `json:"email" gorm:"type:varchar(100);unique;not null"`
 	Password  string `json:"password" gorm:"type:varchar(100);not null"`
-	Role      string `json:"role" gorm:"type:varchar(50);not null;default:'user'"`
+	Roles     []Role `gorm:"many2many:user_roles;"`
 	Phone     string `json:"phone" gorm:"type:varchar(15)"`
 }
