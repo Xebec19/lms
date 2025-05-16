@@ -16,28 +16,53 @@ func Migrate(db *gorm.DB) error {
 		return err
 	}
 
-	// Create default roles and permissions
+	// Step 1: Predefine all permissions
+	allPermissions := []models.Permission{
+		{Name: "create:course", Description: "Create course"},
+		{Name: "delete:course", Description: "Delete course"},
+		{Name: "update:course", Description: "Update course"},
+		{Name: "view:course", Description: "View course"},
+	}
+
+	// Step 2: Create or find existing permissions
+	for _, perm := range allPermissions {
+		var existing models.Permission
+		err := db.Where("name = ?", perm.Name).FirstOrCreate(&existing, perm).Error
+		if err != nil {
+			return err
+		}
+	}
+
+	// Step 3: Map name → permission
+	permMap := make(map[string]models.Permission)
+	for _, perm := range allPermissions {
+		var p models.Permission
+		db.Where("name = ?", perm.Name).First(&p)
+		permMap[perm.Name] = p
+	}
+
+	// Step 4: Define roles using shared permission references
 	roles := []models.Role{
 		{
 			Name:        "admin",
-			Description: "Administrator role with all permissions",
+			Description: "Administrator role",
 			Permissions: []models.Permission{
-				{Name: "create:course", Description: "Create course"},
-				{Name: "delete:course", Description: "Delete course"},
-				{Name: "update:course", Description: "Update course"},
-				{Name: "view:course", Description: "View course"},
+				permMap["create:course"],
+				permMap["delete:course"],
+				permMap["update:course"],
+				permMap["view:course"],
 			},
 		},
 		{
 			Name:        "user",
-			Description: "Regular user role with limited permissions",
+			Description: "Regular user role",
 			Permissions: []models.Permission{
-				{Name: "view:course", Description: "View course"},
+				permMap["view:course"],
 			},
 		},
 	}
 
-	// Check if roles already exist
+	// Step 5: Create roles if not exist
 	for _, role := range roles {
 		var count int64
 		err := db.Model(&models.Role{}).Where("name = ?", role.Name).Count(&count).Error
