@@ -14,7 +14,7 @@ func GetRoutes() *mux.Router {
 	api := r.PathPrefix("/api").Subrouter()
 
 	handleRoutes(api)
-	handleAuthRoutes(api)
+	handleUserRoutes(api)
 
 	return r
 }
@@ -24,8 +24,8 @@ func handleRoutes(api *mux.Router) {
 
 }
 
-func handleAuthRoutes(api *mux.Router) {
-	auth := api.PathPrefix("/v1/auth").Subrouter()
+func handleUserRoutes(api *mux.Router) {
+	auth := api.PathPrefix("/v1/user/auth").Subrouter()
 
 	auth.HandleFunc("/signup", handler.HandleSignup).Methods("POST")
 }

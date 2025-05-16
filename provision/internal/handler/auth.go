@@ -40,7 +40,9 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 		Email:     req.Email,
 		Password:  hash,
 		Phone:     req.Phone,
-		Role:      req.Role,
+		Roles: []models.Role{
+			{Name: "user"},
+		},
 	}
 
 	if err := userRepo.CreateUser(user); err != nil {
