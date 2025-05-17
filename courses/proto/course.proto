@@ -1,0 +1,26 @@
+syntax = "proto3";
+package course;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/Xebec19/lms/courses/gen/coursepb";
+
+service CourseService {
+  rpc GetCourses(google.protobuf.Empty) returns (GetCoursesResponse) {
+    option (google.api.http) = {
+      get: "/v1/courses"
+    };
+  }
+}
+
+message Course {
+  string course_id = 1;
+  string title = 2;
+  string description = 3;
+  string slug = 4;
+}
+
+message GetCoursesResponse {
+  repeated Course courses = 1;
+}
