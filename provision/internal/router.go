@@ -28,4 +28,5 @@ func handleUserRoutes(api *mux.Router) {
 	auth := api.PathPrefix("/v1/user/auth").Subrouter()
 
 	auth.HandleFunc("/signup", handler.HandleSignup).Methods("POST")
+	auth.HandleFunc("/signin", handler.HandleSignin).Methods("POST")
 }

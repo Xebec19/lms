@@ -15,9 +15,16 @@ type Config struct {
 	DB_NAME     string `mapstructure:"DB_NAME"`
 	DB_USER     string `mapstructure:"DB_USER"`
 	DB_PASSWORD string `mapstructure:"DB_PASSWORD"`
+	GO_ENV      string `mapstructure:"GO_ENV"`
 }
 
 func InitConfig() {
+
+	if os.Getenv("GO_ENV") == "test" {
+		logger.Log.Info("Running in test mode, skipping .env loading")
+		return
+	}
+
 	err := godotenv.Load()
 	if err != nil {
 		logger.Log.Error("Error loading .env file", zap.Error(err))
@@ -35,5 +42,6 @@ func GetConfig() *Config {
 		DB_NAME:     os.Getenv("DB_NAME"),
 		DB_USER:     os.Getenv("DB_USER"),
 		DB_PASSWORD: os.Getenv("DB_PASSWORD"),
+		GO_ENV:      os.Getenv("GO_ENV"),
 	}
 }
