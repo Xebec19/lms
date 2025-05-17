@@ -16,6 +16,10 @@ type Config struct {
 	DB_USER     string `mapstructure:"DB_USER"`
 	DB_PASSWORD string `mapstructure:"DB_PASSWORD"`
 	GO_ENV      string `mapstructure:"GO_ENV"`
+	JWT_SECRET  string `mapstructure:"JWT_SECRET"`
+	APP_NAME    string `mapstructure:"APP_NAME"`
+	APP_URL     string `mapstructure:"APP_URL"`
+	WEB_URL     string `mapstructure:"WEB_URL"`
 }
 
 func InitConfig() {
@@ -43,5 +47,9 @@ func GetConfig() *Config {
 		DB_USER:     os.Getenv("DB_USER"),
 		DB_PASSWORD: os.Getenv("DB_PASSWORD"),
 		GO_ENV:      os.Getenv("GO_ENV"),
+		JWT_SECRET:  os.Getenv("JWT_SECRET"),
+		APP_NAME:    os.Getenv("APP_NAME"),
+		APP_URL:     os.Getenv("APP_URL"),
+		WEB_URL:     os.Getenv("WEB_URL"),
 	}
 }

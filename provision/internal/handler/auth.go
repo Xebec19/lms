@@ -8,6 +8,7 @@ import (
 	"github.com/Xebec19/lms/provision/internal/db"
 	"github.com/Xebec19/lms/provision/internal/db/models"
 	"github.com/Xebec19/lms/provision/internal/db/repository"
+	"github.com/Xebec19/lms/provision/internal/helpers"
 	"github.com/Xebec19/lms/provision/internal/requests"
 	"gorm.io/gorm"
 )
@@ -91,7 +92,13 @@ func HandleSignin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.Preload("Roles.Permissions").First(&user, user.ID)
+	// Generate JWT token
+	jwtSecret := []byte(utils.GetConfig().JWT_SECRET)
+	token, err := helpers.GenerateJWT(jwtSecret, user.ID)
+	if err != nil {
+		utils.WriteErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
 
-	utils.WriteResponse(w, http.StatusOK, "Signin successful", nil)
+	utils.WriteResponse(w, http.StatusOK, "Signin successful", map[string]string{"token": token})
 }
