@@ -8,7 +8,9 @@ import (
 	"github.com/Xebec19/lms/provision/internal/db"
 	"github.com/Xebec19/lms/provision/internal/db/models"
 	"github.com/Xebec19/lms/provision/internal/db/repository"
+	"github.com/Xebec19/lms/provision/internal/helpers"
 	"github.com/Xebec19/lms/provision/internal/requests"
+	"gorm.io/gorm"
 )
 
 func HandleSignup(w http.ResponseWriter, r *http.Request) {
@@ -34,15 +36,21 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userRepo := repository.NewUserRepo(db)
+
+	roleRepo := repository.NewRoleRepository(db)
+	role, err := roleRepo.GetRole("user")
+	if err != nil {
+		utils.WriteErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	user := &models.User{
 		FirstName: req.FirstName,
 		LastName:  req.LastName,
 		Email:     req.Email,
 		Password:  hash,
 		Phone:     req.Phone,
-		Roles: []models.Role{
-			{Name: "user"},
-		},
+		Roles:     []models.Role{*role},
 	}
 
 	if err := userRepo.CreateUser(user); err != nil {
@@ -70,15 +78,27 @@ func HandleSignin(w http.ResponseWriter, r *http.Request) {
 
 	userRepo := repository.NewUserRepo(db)
 	user, err := userRepo.GetUserByEmail(req.Email)
+	if err == gorm.ErrRecordNotFound {
+		utils.WriteErrorResponse(w, http.StatusBadRequest, err)
+		return
+	}
 	if err != nil {
 		utils.WriteErrorResponse(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	if err := bcrypt.CheckPasswordHash(user.Password, req.Password); err != nil {
+	if err := bcrypt.CheckPasswordHash(req.Password, user.Password); err != nil {
 		utils.WriteErrorResponse(w, http.StatusUnauthorized, err)
 		return
 	}
 
-	utils.WriteResponse(w, http.StatusOK, "Signin successful", nil)
+	// Generate JWT token
+	jwtSecret := []byte(utils.GetConfig().JWT_SECRET)
+	token, err := helpers.GenerateJWT(jwtSecret, user.ID)
+	if err != nil {
+		utils.WriteErrorResponse(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	utils.WriteResponse(w, http.StatusOK, "Signin successful", map[string]string{"token": token})
 }
